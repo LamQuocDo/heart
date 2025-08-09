@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>4u</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #ffe6eb;
+        overflow-x: hidden;
+    }
+    .page {
+        display: none;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    .active {
+        display: flex;
+    }
+    input, button {
+        padding: 10px 20px;
+        margin: 10px;
+        font-size: 1rem;
+        border-radius: 15px;
+        border: none;
+    }
+    button {
+        background-color: #ff4f87;
+        color: white;
+        cursor: pointer;
+    }
+    button:hover {
+        opacity: 0.8;
+    }
+    /* Yes/No page */
+    .question {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    .buttons {
+        position: relative;
+        width: 300px;
+        height: 150px;
+    }
+    .btn-yes, .btn-no {
+        position: absolute;
+        padding: 10px 20px;
+        background-color: #ff4f87;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        font-size: 1rem;
+    }
+    .btn-yes {
+        left: 60px;
+        top: 50px;
+    }
+    .btn-no {
+        left: 180px;
+        top: 50px;
+        background-color: rgb(185, 182, 182);
+    }
+    /* Heart page */
+    .heart-container {
+        position: relative;
+        width: 300px;
+        height: 300px;
+    }
+    .love-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #d63384;
+        white-space: nowrap;
+        z-index: 2;
+    }
+    .floating-heart {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        animation: float 5s infinite;
+        opacity: 0.8;
+    }
+
+    #nameInput{
+        border-bottom: solid 2px black;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0) scale(1); opacity: 1; }
+        100% { transform: translateY(-500px) scale(1.5); opacity: 0; }
+    }
+</style>
+</head>
+<body>
+
+<!-- Page 1 -->
+<div id="page1" class="page active">
+    <h2>What’s your full name?</h2>
+    <input type="text" id="nameInput" placeholder="Enter full name" />
+    <button onclick="checkName()" class="next-btn">Next -></button>
+</div>
+
+<!-- Page 2 -->
+<div id="page2" class="page">
+    <div class="question">Do you love me? ❤️</div>
+    <div class="buttons">
+        <button class="btn-yes" onclick="showHeartPage()">Yes</button>
+        <button class="btn-no" id="noBtn">No</button>
+    </div>
+</div>
+
+<!-- Page 3 -->
+<div id="page3" class="page">
+    <div class="heart-container">
+        <div class="love-text">I love you too ❤️</div>
+        <!-- Đã xóa khung trái tim ở đây -->
+    </div>
+</div>
+
+<script>
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+function checkName() {
+    const name = document.getElementById("nameInput").value.trim();
+    if (name === "Nguyễn Thị Mỹ An") {
+        showPage("page2");
+    } else {
+        alert("Not you! Get out!");
+    }
+}
+
+// No button movement (PC + mobile)
+const noBtn = document.getElementById("noBtn");
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
+
+function moveNo() {
+    const x = Math.random() * 200;
+    const y = Math.random() * 100;
+    noBtn.style.left = `${x}px`;
+    noBtn.style.top = `${y}px`;
+}
+
+function showHeartPage() {
+    showPage("page3");
+    spawnHearts();
+}
+
+function spawnHearts() {
+    const heartPage = document.getElementById("page3");
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.innerHTML = "❤️";
+        heart.className = "floating-heart";
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.bottom = "0px";
+        heart.style.fontSize = Math.random() * 20 + 20 + "px";
+        heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+        heartPage.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }, 500);
+}
+</script>
+
+</body>
+</html>
